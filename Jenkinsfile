@@ -8,7 +8,13 @@ pipeline {
         COURSE = "Jenkins"
     }
     options{
-        timeout(time: 10, unit: 'SECONDS')
+        timeout(time: 10, unit: 'MINUTES')
+        disableConcurrentBuilds()
+    }
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+        booleanParam(name: 'DEBUG_MODE', defaultValue: true, description: 'Enable debug output?')
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'staging', 'prod'], description: 'Target environment')
     }
     stages {
         stage('Build') {
@@ -16,7 +22,7 @@ pipeline {
                 script{
                     sh """
                         echo "Building"
-                        sleep 10
+                        # sleep 10
                         echo $COURSE
                         env
                     """
