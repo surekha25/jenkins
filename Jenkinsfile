@@ -16,6 +16,7 @@ pipeline {
         booleanParam(name: 'DEBUG_MODE', defaultValue: true, description: 'Enable debug output?')
         choice(name: 'ENVIRONMENT', choices: ['dev', 'staging', 'prod'], description: 'Target environment')
     }
+    // This is Build Section
     stages {
         stage('Build') {
             steps {
