@@ -14,7 +14,7 @@ pipeline {
     }
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-        booleanParam(name: 'DEBUG_MODE', defaultValue: true, description: 'Enable debug output?')
+        booleanParam(name: 'DEPLOY', defaultValue: false, description: 'Enable debug output?')
         choice(name: 'ENVIRONMENT', choices: ['dev', 'staging', 'prod'], description: 'Target environment')
     }
     // This is Build Section
@@ -24,9 +24,15 @@ pipeline {
                 script{
                     sh """
                         echo "Building"
-                        # sleep 10
                         echo $COURSE
+                        sleep 10
                         env
+
+                        echo "Hello ${params.PERSON}"
+                        echo "Biography: ${params.BIOGRAPHY}"
+                        echo "Toggle: ${params.DEPLOY}"
+                        echo "Choice: ${params.CHOICE}"
+                        echo "Password: ${params.PASSWORD}"
                     """
                 }
             }
@@ -41,13 +47,16 @@ pipeline {
             }
         }
         stage('Deploy') {
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-                submitter "alice,bob"
-                parameters {
-                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                }
+            // input {
+            //     message "Should we continue?"
+            //     ok "Yes, we should."
+            //     submitter "alice,bob"
+            //     parameters {
+            //         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+            //     }
+            // }
+            when { 
+                expression { "$params.DEPLOY" == "true" }
             }
             steps {
                 script{
